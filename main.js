@@ -84,7 +84,7 @@ function createMainWindow () {
       }
     },
     { label: 'Restart', click: () => { restartApp() } },
-    { label: 'Exit', click: () => { app.isQuitting = true; app.quit() } },
+    { label: 'Quit', click: () => { app.isQuitting = true; app.quit() } },
   ])
   tray.setContextMenu(contextMenu);
 
