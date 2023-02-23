@@ -24,3 +24,8 @@ The ChatGPT desktop companion app is a convenient and easy-to-use tool that allo
  - Initial Release
  - Resizable chromeless window
  - Minimize/Close to Tray
+
+---------------------
+
+PS: App is built on Electron. You can build the final binaries using electron-packager, electron-forge, electron-builder etc.
+You may refer to this [document](https://refreshie.think.dj/docs/#/) and follow a similar approach for cloud builds.
