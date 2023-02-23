@@ -13,3 +13,14 @@ The ChatGPT desktop companion app is a convenient and easy-to-use tool that allo
 
 ![Screenshot](https://i.ibb.co/8M33CSn/Chat-GPT-Sidebar-Screenshot.png)
 
+---------------------------
+
+## Change Log
+
+##### Version 1.0.2 (2023-02-23)
+- Remembers the last window size and state
+- Support for Tray menu "Always on Top", "Restart", "Exit"
+##### Version 1.0.0 (2023-02-23)
+ - Initial Release
+ - Resizable chromeless window
+ - Minimize/Close to Tray
