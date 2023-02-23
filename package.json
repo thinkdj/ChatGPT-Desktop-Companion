@@ -1,0 +1,20 @@
+{
+  "name": "chatgpt-desktop-companion",
+  "version": "1.0.2",
+  "main": "main.js",
+  "author": {
+    "name": "thinkdj",
+    "email": "think.dj@gmail.com",
+    "url": "https://think.dj/"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^23.1.1",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron-reload": "^2.0.0-alpha.1"
+  }
+}
