@@ -1,44 +1,49 @@
-const { app, BrowserWindow, screen, webFrame, Menu, Tray } = require('electron');
+const { app, BrowserWindow, screen, webFrame, dialog, Menu, Tray } = require('electron');
 const path = require('path');
-
 const Store = require('electron-store');
 const store = new Store();
+const prompt = require('electron-prompt');
 
-/* ========= DEV ========= */
+/* ============= DEV ============= */
+/* Hot reload on code change ? */
 if (process.env.NODE_ENV !== 'production') {
   require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/node_modules/electron`)
   });
 }
-/* ========= /DEV ========= */
+/* ============= /DEV ============= */
 
 let tray = null;
 let mainWindow = null;
+let appIsQuitting = false;
+const defaultUrl = 'https://chat.openai.com/chat/';
 
 function createMainWindow () {
 
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
-  const windowBoundsDisk = store.get('app_windowBounds');
-  const appAlwaysOnTop = store.get('app_alwaysOnTop') ?? false;
+  let appConfigLoadUrl = store.get('app_loadUrl') ?? defaultUrl;
+  const appConfigWindowBounds = store.get('app_windowBounds');
+  const appConfigAlwaysOnTop = store.get('app_alwaysOnTop') ?? false;
 
   mainWindow = new BrowserWindow({
     minWidth: 420,
     minHeight: 500,
-    width: windowBoundsDisk?.width ?? Math.round(width * 0.25),
-    height: windowBoundsDisk?.height ?? height,
-    x: windowBoundsDisk?.x ?? Math.round(width * 0.75),
-    y: windowBoundsDisk?.y ?? 0,
+    width: appConfigWindowBounds?.width ?? Math.round(width * 0.25),
+    height: appConfigWindowBounds?.height ?? height,
+    x: appConfigWindowBounds?.x ?? Math.round(width * 0.75),
+    y: appConfigWindowBounds?.y ?? 0,
     frame: false,
-    alwaysOnTop: appAlwaysOnTop,
+    alwaysOnTop: appConfigAlwaysOnTop,
     resizable: true,
     movable: true, // Window dragging
     webPreferences: {
       nodeIntegration: true, // Enable Node.js integration in the renderer process
+      contextIsolation: false, // Enable Node.js integration in the renderer process
     }
   })
 
-  mainWindow.loadURL('https://chat.openai.com/chat/');
+  mainWindow.loadURL(appConfigLoadUrl);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -49,15 +54,28 @@ function createMainWindow () {
     mainWindow.hide();
   })
 
+  app.on('before-quit', () => {
+    appIsQuitting = true;
+  });
+  app.on('window-all-closed', () => {
+    if (!appIsQuitting) {
+      app.quit();
+    }
+  });
+  app.on('quit', () => {
+    if (!appIsQuitting) {
+      app.relaunch();
+      app.exit(0);
+    }
+  });
   mainWindow.on('close', (event) => {
     store.set('app_windowBounds', mainWindow.getBounds());
-    if (!app.isQuitting) {
+    if (!appIsQuitting) {
       event.preventDefault();
       mainWindow.hide();
     }
     return false;
-  })
-
+  });
 
   /* TRAY */
   tray = new Tray(path.join(__dirname, 'assets/chatGPT_logo.png'));
@@ -76,15 +94,39 @@ function createMainWindow () {
     {
       label: 'Always on top',
       type: 'checkbox',
-      checked: appAlwaysOnTop,
+      checked: appConfigAlwaysOnTop,
       click: function() {
         let aotValue = !mainWindow.isAlwaysOnTop();
         mainWindow.setAlwaysOnTop(aotValue);
         store.set('app_alwaysOnTop', aotValue);
       }
     },
+    {
+      label: 'Change URL',
+      click: () => {
+        prompt({
+          title: 'Enter a new URL',
+          label: 'URL: This would be opened in the app',
+          value: appConfigLoadUrl,
+          width: 480,
+          height: 180,
+          inputAttrs: {
+            type: 'url',
+          },
+        })
+            .then( (result) => {
+              let newUrl = (result && result.trim() !== '')?result:defaultUrl;
+              appConfigLoadUrl = newUrl;
+              store.set('app_loadUrl', newUrl);
+              mainWindow.loadURL(newUrl);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+      },
+    },
     { label: 'Restart', click: () => { restartApp() } },
-    { label: 'Quit', click: () => { app.isQuitting = true; app.quit() } },
+    { label: 'Quit', click: () => { appIsQuitting = true; app.quit() } },
   ])
   tray.setContextMenu(contextMenu);
 

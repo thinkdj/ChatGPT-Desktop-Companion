@@ -6,7 +6,7 @@ The ChatGPT desktop companion app is a convenient and easy-to-use tool that allo
 ```cmd
  npm i -g electron
  npm i
- npm start
+ npm start (or electron .)
 ```
 
 ##### Screenshot
