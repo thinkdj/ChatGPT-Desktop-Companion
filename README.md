@@ -9,7 +9,7 @@ The ChatGPT desktop companion app is a convenient and easy-to-use tool that allo
  npm start (or electron .)
 ```
 
-##### Screenshot
+#### Screenshot
 
 ![Screenshot](https://i.ibb.co/8M33CSn/Chat-GPT-Sidebar-Screenshot.png)
 
@@ -17,15 +17,19 @@ The ChatGPT desktop companion app is a convenient and easy-to-use tool that allo
 
 ## Change Log
 
-##### Version 1.0.2 (2023-02-23)
+##### Version 1.0.2 (2023-02-24)
+- "Change URL" option for future-proofing
+##### Version 1.0.1 (2023-02-23)
 - Remembers the last window size and state
 - Support for Tray menu "Always on top", "Restart", "Quit"
 ##### Version 1.0.0 (2023-02-23)
- - Initial Release
+ - Initial release
  - Resizable chromeless window
  - Minimize/Close to Tray
 
 ---------------------
 
-PS: App is built on Electron. You can build the final binaries using electron-packager, electron-forge, electron-builder etc.
-You may refer to this [document](https://refreshie.think.dj/docs/#/) and follow a similar approach for cloud builds.
+This app is built on **Electron**. 
+You can build the final binaries using electron-packager, electron-forge, electron-builder etc.
+
+You may refer to this [document](https://refreshie.think.dj/docs/#/) and follow a similar approach for cloud builds (Windows/MacOS/Linux).
