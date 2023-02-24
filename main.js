@@ -1,11 +1,11 @@
-const { app, BrowserWindow, screen, webFrame, dialog, Menu, Tray } = require('electron');
+const { app, BrowserWindow, screen, webFrame, Menu, Tray } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
 const store = new Store();
 const prompt = require('electron-prompt');
 
 /* ============= DEV ============= */
-/* Hot reload on code change ? */
+/* Hot reload on code change ? * /
 if (process.env.NODE_ENV !== 'production') {
   require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/node_modules/electron`)
